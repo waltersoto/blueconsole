@@ -30,5 +30,5 @@ Ex.
             bc.Listen();
 ```
 
-It will listen for custom commands **users** and **cities** and it will execute the call back.
+It will listen for custom commands **users** and **cities** and it will execute the call back. Typing **help** will display the number of commands available.
 
