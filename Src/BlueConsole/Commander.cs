@@ -10,9 +10,8 @@ namespace BlueConsole {
         public Commander(ConsoleColor backgroundColor, ConsoleColor foregroundColor) {
             BackgroundColor = backgroundColor;
             ForegroundColor = foregroundColor;
-            Commands = new List<Command>();
-            StartNotes = new List<string>();
-            Prompt = "Commander";
+            Prompt = "Command";
+            PromptSign = ">";
             Title = "Command Listener 1.0";
             Divider = "=========================================";
         }
@@ -26,17 +25,21 @@ namespace BlueConsole {
 
         public void Help() {
 
-            ShowHelp(DefaultValues.EXIT, DefaultValues.EXIT_HELP);
-            ShowHelp(DefaultValues.CLEAR, DefaultValues.CLEAR_HELP);
-            ShowHelp(DefaultValues.CLS, DefaultValues.CLS_HELP);
-            ShowHelp(DefaultValues.HELP, DefaultValues.HELP_HELP);
+            ShowHelp(DefaultValues.EXIT, DefaultValues.EXIT_HELP, DefaultValues.EXIT_USAGE);
+            ShowHelp(DefaultValues.CLEAR, DefaultValues.CLEAR_HELP, DefaultValues.CLEAR_USAGE);
+            ShowHelp(DefaultValues.CLS, DefaultValues.CLS_HELP, DefaultValues.CLS_USAGE);
+            ShowHelp(DefaultValues.HELP, DefaultValues.HELP_HELP, DefaultValues.HELP_USAGE);
             foreach (var cmd in Commands) {
-                ShowHelp(cmd.Name, cmd.Help);
+                ShowHelp(cmd.Name, cmd.Help, cmd.Usage);
             }
         }
 
-        public void ShowHelp(string name, string help) {
+        public void ShowHelp(string name, string help, string usage) {
             Console.WriteLine("{0}: {1}", name, help);
+            if (!string.IsNullOrEmpty(usage)) {
+                Console.WriteLine(usage);
+            }
+
             Console.WriteLine();
         }
 
@@ -45,7 +48,7 @@ namespace BlueConsole {
             Console.ForegroundColor = ForegroundColor;
             Console.BackgroundColor = BackgroundColor;
             Clear();
-            if (StartNotes.Any()) {
+            if (StartNotes != null && StartNotes.Any()) {
                 foreach (var note in StartNotes) {
                     Console.WriteLine(note);
                     Console.WriteLine();
@@ -54,7 +57,7 @@ namespace BlueConsole {
             }
             while (running) {
 
-                Console.Write("{0}> ", Prompt);
+                Console.Write("{0}{1} ", Prompt, PromptSign);
                 var cmd = Console.ReadLine();
                 Console.WriteLine();
 
@@ -79,21 +82,21 @@ namespace BlueConsole {
                 switch (name.Trim().ToLower()) {
                     case DefaultValues.EXIT:
                         if (showHelp) {
-                            ShowHelp(DefaultValues.EXIT, DefaultValues.EXIT_HELP);
+                            ShowHelp(DefaultValues.EXIT, DefaultValues.EXIT_HELP, DefaultValues.EXIT_USAGE);
                         } else {
                             running = false;
                         }
                         break;
                     case DefaultValues.CLEAR:
                         if (showHelp) {
-                            ShowHelp(DefaultValues.CLEAR, DefaultValues.CLEAR_HELP);
+                            ShowHelp(DefaultValues.CLEAR, DefaultValues.CLEAR_HELP, DefaultValues.CLEAR_USAGE);
                         } else {
                             Clear();
                         }
                         break;
                     case DefaultValues.CLS:
                         if (showHelp) {
-                            ShowHelp(DefaultValues.CLS, DefaultValues.CLS_HELP);
+                            ShowHelp(DefaultValues.CLS, DefaultValues.CLS_HELP, DefaultValues.CLS_USAGE);
                         } else {
                             Clear();
                         }
@@ -102,22 +105,23 @@ namespace BlueConsole {
                         Help();
                         break;
                     default:
-
-                        if (
-                            Commands.Any(
+                        if (Commands.Any(
                                 m => m.Name.Trim().Equals(name, StringComparison.InvariantCultureIgnoreCase))) {
 
                             var command = Commands.FirstOrDefault(m => m.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
                             if (command != null && showHelp) {
-                                ShowHelp(command.Name, command.Help);
+                                ShowHelp(command.Name, command.Help, command.Usage);
                             } else {
-                                command?.Callback?.Invoke(parameters);
+                                var list = new List<string>();
+                                if (parameters.Count > 1) {
+                                    list.AddRange(parameters.Skip(1));
+                                }
+                                command?.Callback?.Invoke(list);
                             }
 
                         }
                         break;
                 }
-
 
             }
         }
@@ -129,9 +133,10 @@ namespace BlueConsole {
                                 .ToList();
 
         public string Prompt { set; get; }
+        public string PromptSign { set; get; }
         public ConsoleColor BackgroundColor { set; get; }
         public ConsoleColor ForegroundColor { set; get; }
-        public IList<Command> Commands { set; get; }
+        public IList<ICommand> Commands { set; get; }
         public string Title { set; get; }
         public string Divider { set; get; }
         public IList<string> StartNotes { set; get; }

@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlueConsole", "BlueConsole\BlueConsole.csproj", "{60335B48-46C2-44C3-A094-135B51687567}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlueConsoleTest", "BlueConsoleTest\BlueConsoleTest.csproj", "{741A3CAA-E168-47D8-A891-2E37149DE9C2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlueConsoleTest", "BlueConsoleUsage\BlueConsoleTest.csproj", "{741A3CAA-E168-47D8-A891-2E37149DE9C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

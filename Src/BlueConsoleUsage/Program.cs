@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BlueConsole;
 
 namespace BlueConsoleTest {
@@ -8,7 +9,7 @@ namespace BlueConsoleTest {
 
             var bc = new Commander {
                 Prompt = "MyShell",
-                Commands = new List<Command>
+                Commands = new List<ICommand>
                 {
                     new Command
                     {
@@ -16,14 +17,14 @@ namespace BlueConsoleTest {
                         Help = "Ex. \"users a\"",
                         Callback = list =>
                         {
-                            Users(list.Count > 1?list[1]:"");
+                            Users(list.FirstOrDefault() ?? "");
                         }
                     },
                     new Command
                     {
                         Name = "cities",
                         Help = "Ex. \"cities a\"",
-                        Callback = list => { Cities(list.Count > 1?list[1]:""); }
+                        Callback = list => { Cities(list.FirstOrDefault() ?? ""); }
                     }
                 }
             };
