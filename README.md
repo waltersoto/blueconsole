@@ -7,7 +7,7 @@ Ex.
 ```cs
             var bc = new Commander {
                 Prompt = "MyShell",
-                Commands = new List<Command>
+                Commands = new List<ICommand>
                 {
                     new Command
                     {
