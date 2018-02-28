@@ -1,6 +1,6 @@
 # Blue Console
 
-Bolier plate .NET library to help you create a quick console application command list.
+Boilerplate .NET library to help you create a quick console application command list.
 
 Ex.
 
